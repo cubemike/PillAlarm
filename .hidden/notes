@@ -1,0 +1,26 @@
+- Repeat alarms do seem to work as advertised. Leap years and daylight savings seem to be handled completely transparently and I shouldn't have to worry about them at all.
+
+- If I have a list of alarms that need to be set, some might be for earlier in the day than now, and some might be for later in the day than now. Lazy way to handle this would be to set the alarm for the time in question, yesterday with REPEAT_DAY.
+
+- App settings seem to work by an implicit update listener. In the watch app the callback might be onCall()?
+
+- VIBRATOR_SCENE_TIMER will vibrate like the wake up alarm until canceled/snoozed.
+
+- You can set the param property of an alarm to JSON.stringify(obj), setting a property of the app globalData to tthat string in onCreate(), then parsing that object with JSON.parse() in a page to send a whole object in an alarm (i.e. an entire alarm struct)
+
+- But, this doesn't work for some dumb reason if you're still in the app. onCreate(option) will have options undefinedgt
+
+Outline of the program:
+    - Alarms set in the settings app.
+    - Alarms sent over to the watch side as JSON
+    - Alarms created. Repeating and presistent.
+    - Alarm rings.
+    - Alarm is either canceled or snoozed
+        - Canceled: vibration is just stopped. The alarm will ring in 24 hours.
+        - Snoozed: A new one-time alarm is created for X+snooze_time.
+
+- Just realized most of these features exist as the built in alarm clock. The additional features:
+    - Titles for alarms (i.e. medication names)
+    - Customizable snooze
+    - Grouped in the settings app by medication for multiple doses
+    - Potential logging of actual taken timea
