@@ -6,7 +6,7 @@ AppSettingsPage({
     state: {
       todoList: [],
       props: {},
-      newAlarm: {title: 'default', note: 'default note', hours:0, minutes:0},
+      newAlarm: {title: 'Alarm', note: "", time:{hours:0, minutes:0}},
       screen: 'main',
     },
     addTodoList(val) {
@@ -29,6 +29,7 @@ AppSettingsPage({
         };
         this.state.alarms.push(newAlarm);
         this.state.props.settingsStorage.setItem('alarms', JSON.stringify(this.state.alarms));
+        this.state.newAlarm = {title: 'Alarm', note: '', hours:0, minutes:0}
     },
     deleteAlarm(idx) {
         this.state.alarms.splice(idx, 1);
@@ -216,6 +217,14 @@ AppSettingsPage({
                 //contentItems.push(View({}, Text({style: {fontSize:'10px'}}, JSON.stringify(this.state.alarms))))
                 //contentItems.push(View({}, Text({style: {fontSize:'10px'}}, this.state.props.settingsStorage.getItem('alarms'))))
         } else {
+            let titleProps = {}
+            if (this.state.newAlarm.title && this.state.newAlarm.title !== 'Alarm') {
+                titleProps.value = this.state.newAlarm.title;
+                titleProps.label =  'Title';
+            } else {
+                titleProps.placeholder = 'Title';
+                titleProps.label =  'Add title';
+            }
             contentItems.push(View({
                 style: {
                     outline: 'solid',
@@ -229,8 +238,7 @@ AppSettingsPage({
                         style: {...timeStyle,
                                 width: '100%'}},
                         TextInput({
-                            label: 'Title',
-                            value: this.getNewAlarmTitle(),
+                            ...titleProps,
                             onChange: str => {
                                 this.state.newAlarm.title = str;
                                 this.state.props.settingsStorage.setItem('foo', 'bar')
@@ -280,6 +288,15 @@ AppSettingsPage({
                         }),
                     ),
                 ]));
+
+            let noteProps = {}
+            if (this.state.newAlarm.note) {
+                noteProps.value = this.state.newAlarm.note;
+                noteProps.label = 'Note';
+            } else {
+                noteProps.label = 'Add note';
+                noteProps.placeholder = 'Note';
+            }
             contentItems.push(View({
                 style: {
                     outline: 'solid',
@@ -295,10 +312,10 @@ AppSettingsPage({
                             width: '100%'
                         }},
                         TextInput({
-                            label: 'Note',
+                            ...noteProps,
                             multiline: true,
                             rows: 5,
-                            value: this.getNewAlarmNote(),
+                            //value: this.getNewAlarmNote(),
                             onChange: str => {
                                 this.state.newAlarm.note = str;
                                 this.state.props.settingsStorage.setItem('foo', 'bar')

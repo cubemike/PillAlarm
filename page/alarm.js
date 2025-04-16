@@ -6,6 +6,8 @@ const vibrator = new sensor.Vibrator()
 import Time from '../utils/Time.js'
 Page({
     build() {
+        let id;
+
         obj = JSON.parse(getApp()._options.globalData.foo)
         time = new Time()
         time.foo(obj.time)
@@ -28,11 +30,8 @@ Page({
             normal_color: 0xff5000,
             press_color: 0xffa000,
             click_func: () => {
-                vibrator.stop()
-                //alarm.getAllAlarms().forEach((x) => {
-                //    alarm.cancel(x);
-                //    console.log(`Cleared alarm ${x}`);
-                //});
+                vibrator.stop();
+                alarm.cancel(id);
                 router.home();
             }
         });
@@ -47,24 +46,24 @@ Page({
             normal_color: 0xff5000,
             press_color: 0xffa000,
             click_func: () => {
-                vibrator.stop()
-                let date = new Date();
-                date.setMinutes(date.getMinutes() + 10);
-                console.log(date);
-                const option = {
-                    url: 'page/alarm',
-                    time: date.getTime()/1000,
-                    param: getApp()._options.globalData.foo
-                    //repeat_type: alarm.REPEAT_MINUTE
-                };
-                let id = alarm.set(option);
-                console.log(`Set alarm ${id}`)
+                vibrator.stop();
                 router.home();
             }
         });
 
         vibrator.setMode(sensor.VIBRATOR_SCENE_TIMER);
         vibrator.start();
+
+        let date = new Date();
+        date.setMinutes(date.getMinutes() + 1);
+        console.log(date, '\n');
+        const option = {
+            url: 'page/alarm',
+            time: date.getTime()/1000,
+            param: getApp()._options.globalData.foo
+        };
+        id = alarm.set(option);
+        console.log(`Set alarm ${id}`, '\n')
 
     }
 })
