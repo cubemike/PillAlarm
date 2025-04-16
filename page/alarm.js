@@ -55,7 +55,7 @@ Page({
         vibrator.start();
 
         let date = new Date();
-        date.setMinutes(date.getMinutes() + 1);
+        date.setMinutes(date.getMinutes() + 10);
         console.log(date, '\n');
         const option = {
             url: 'page/alarm',
